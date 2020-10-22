@@ -1,5 +1,12 @@
 # DD api examples
 
+
+## Create auth token
+```
+curl --request POST --url https://ddapi.production.dietdoctor.com/auth/create  --header 'content-type: application/json' --data '{ "username": "email@example.com", "password": "example" }' 
+```
+
+
 ## Get 25 recipes
 
 ```shell
@@ -18,4 +25,6 @@ curl --request POST --url https://ddapi.production.dietdoctor.com/v1/ \
   --data '{"query":"query GetMemberMealPlans {\n memberMealplans(perPage: 25, page: 1) {\n id\n title \n __typename\n }\n}","operationName":"GetMemberMealPlans"}' 
  ```
  
+## postman collection
  
+You can import postman collection with more examples: https://github.com/dietdoctor/postman-api-collection/blob/main/ddAPiCollection.json
