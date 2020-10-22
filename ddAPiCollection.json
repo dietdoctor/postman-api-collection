@@ -1,0 +1,182 @@
+{
+	"info": {
+		"_postman_id": "0bbe685c-b941-4f5f-a656-8720fc49580a",
+		"name": "DietDoctor ddApi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "get free recipes",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "fragment NutritionFragment on Nutrition {\n    values {\n        carbs\n        fat\n        protein\n        fiber\n        calories\n    }\n    percentages {\n        carbs\n        fat\n        protein\n    }\n}\n\nfragment BaseRecipe on Recipe {\n  id\n  isMembersOnly\n  title\n  description\n  rating\n  modifiedAt\n  slug\n  nutrition {\n    ...NutritionFragment\n  }\n  time {\n    preparation\n    cook\n  }\n  difficulty {\n    rating\n    value\n  }\n  images {\n    hz\n    vt\n    brightness\n  }\n  tags {\n    id\n    type\n    title\n  }\n  servings {\n    default\n    allowed\n  }\n  strictness {\n    rating\n    value\n  }\n  instructionSections {\n      title\n      header {\n        text\n      }\n      footer {\n        text\n      }\n      steps\n  }\n  tips {\n   header\n   content\n  }\n  videos {\n     id\n     type\n  }\n}\n\nquery GetRecipes($page: Int,\n  $pageSize: Int,\n  $tagFilters: [String],\n  $premiumOnly: Boolean,\n  $includePremiumPreview: Boolean,\n) {\n  listRecipes(input: {\n    page: $page\n    pageSize: $pageSize\n    tagFilters: $tagFilters,\n    premiumOnly: $premiumOnly,\n    includePremiumPreview: $includePremiumPreview\n  }) {\n    recipes {\n      ...BaseRecipe\n    }\n    totalSize\n    nextPage\n  }\n}",
+						"variables": "{\n\t\"page\": 1,\n\t\"pageSize\": 5,\n\t\"tagFilters\" : [],\n\t\"premiumOnly\": false,\n\t\"includePremiumPreview\": false\n}"
+					}
+				},
+				"url": {
+					"raw": "https://ddapi.production.dietdoctor.com/v1/",
+					"protocol": "https",
+					"host": [
+						"ddapi",
+						"production",
+						"dietdoctor",
+						"com"
+					],
+					"path": [
+						"v1",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get free meal plans",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "fragment NutritionFragment on Nutrition {\n    values {\n        carbs\n        fat\n        protein\n        fiber\n        calories\n    }\n    percentages {\n        carbs\n        fat\n        protein\n    }\n}\n\n\nfragment MealFragment on Meal {\n    active\n    recipesDetails {\n        id\n        title\n        images {\n            hz\n            vt\n        }\n    }\n}\n\nfragment MealPlanFragment on Mealplan {\n    id\n    title\n    userAuthor\n    createdAt\n    description\n    type\n    isMembersOnly\n    schedule {\n      name\n      dinner {\n          ...MealFragment\n      }\n      lunch {\n         ...MealFragment\n      }\n      nutrition {\n        ...NutritionFragment\n      }\n      strictness {\n          rating\n          value\n      }\n    }\n    nutritionAverage {\n      ...NutritionFragment\n    }\n}\n\n\n\nquery GetFreeMealPlans {\n  freeMealplans {\n    ...MealPlanFragment\n  }\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "https://ddapi.production.dietdoctor.com/v1/",
+					"protocol": "https",
+					"host": [
+						"ddapi",
+						"production",
+						"dietdoctor",
+						"com"
+					],
+					"path": [
+						"v1",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "auth create",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n\t\"username\": \"stas.testuser1@dietdoctor.com\",\n    \"password\": \"C5(Pg5qwrwP^(WJ!eS%d38FI\" \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://ddapi.production.dietdoctor.com/auth/create",
+					"protocol": "https",
+					"host": [
+						"ddapi",
+						"production",
+						"dietdoctor",
+						"com"
+					],
+					"path": [
+						"auth",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get member meal plans",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "update me",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "fragment NutritionFragment on Nutrition {\n    values {\n        carbs\n        fat\n        protein\n        fiber\n        calories\n    }\n    percentages {\n        carbs\n        fat\n        protein\n    }\n}\n\n\nfragment MealFragment on Meal {\n    active\n    recipesDetails {\n        id\n        title\n        images {\n            hz\n            vt\n        }\n    }\n}\n\nfragment MealPlanFragment on Mealplan {\n    id\n    title\n    userAuthor\n    createdAt\n    description\n    type\n    isMembersOnly\n    schedule {\n      name\n      dinner {\n          ...MealFragment\n      }\n      lunch {\n         ...MealFragment\n      }\n      nutrition {\n        ...NutritionFragment\n      }\n      strictness {\n          rating\n          value\n      }\n    }\n    nutritionAverage {\n      ...NutritionFragment\n    }\n}\n\n\nquery GetMemberMealPlans {\n  memberMealplans {\n    ...MealPlanFragment\n  }\n}",
+						"variables": "{\n\t\"page\": 1,\n\t\"pageSize\": 1\n}"
+					}
+				},
+				"url": {
+					"raw": "https://ddapi.production.dietdoctor.com/v1/",
+					"protocol": "https",
+					"host": [
+						"ddapi",
+						"production",
+						"dietdoctor",
+						"com"
+					],
+					"path": [
+						"v1",
+						""
+					]
+				},
+				"description": "Make sure to update access token in \"Authorization\""
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "df020b62-3d06-4c26-82db-e6348426d57a",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "5e16b8eb-29e0-47c2-8412-f4e713a2b7f0",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "7c9c1116-5b59-448e-84ea-21530c830ce8",
+			"key": "ACCESS_TOKEN",
+			"value": "example",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
